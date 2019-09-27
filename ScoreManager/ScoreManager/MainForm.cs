@@ -33,10 +33,16 @@ namespace ScoreManager
             {
                 this.manager = new ScoreManager();
             }
+            foreach(var name in this.manager)
+            {
+                this.addDataSong.Items.Add(name);
+            }
+            PaintReset();
+            PaintScoreData();
         }
 
         ScoreManager manager;
-        IEnumerable<(string Name, int Difficulty, int Score, int Rank)> paints;
+        IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank)> paints;
 
         private void DataManagerClick(object sender, EventArgs e)
         {
@@ -44,17 +50,47 @@ namespace ScoreManager
             {
                 form.ShowDialog();
             }
+            this.addDataSong.Items.Clear();
+            foreach (var name in this.manager)
+            {
+                this.addDataSong.Items.Add(name);
+            }
             PaintReset();
+            PaintScoreData();
+        }
+
+        private void PaintScoreData()
+        {
+            this.dataGridView1.Rows.Clear();
+            var index = 0;
+            foreach (var data in this.paints)
+            {
+                var potential = GetPotential(data.Potential, data.Score);
+                var step = GetStep(potential);
+                this.dataGridView1.Rows.Add();
+                this.dataGridView1[0, index].Value = data.Rank;
+                this.dataGridView1[1, index].Value = data.Name;
+                this.dataGridView1[2, index].Value = DifficultyToString(data.Difficulty);
+                this.dataGridView1[3, index].Value = LevelToString(data.Level);
+                this.dataGridView1[4, index].Value = data.Potential;
+                this.dataGridView1[5, index].Value = data.Score;
+                this.dataGridView1[6, index].Value = RoundDown(potential);
+                this.dataGridView1[7, index].Value = RoundDown(step);
+                this.dataGridView1[8, index].Value = RoundDown(step * 102m / 50m, 1);
+                this.dataGridView1[9, index].Value = RoundDown(step * 90m / 50m, 1);
+                this.dataGridView1[10, index].Value = RoundDown(step * 99m / 50m, 1);
+                ++index;
+            }
         }
 
         private void PaintReset()
         {
-            var list = new List<(string Name, int Difficulty, int Score, int Rank)>();
+            var list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank)>();
             foreach (var name in this.manager)
             {
-                foreach(var i in Range(0, 3))
+                foreach (var i in Range(0, 3))
                 {
-                    list.Add((name, i, this.manager[name].Bests[i], 0));
+                    list.Add((name, i, this.manager[name].Levels[i], this.manager[name].Potentials[i], this.manager[name].Bests[i], 0));
                 }
             }
             list.Sort((a, b) =>
@@ -63,10 +99,11 @@ namespace ScoreManager
                 GetPotential(this.manager[a.Name].Potentials[a.Difficulty], a.Score)
                 .CompareTo(GetPotential(this.manager[b.Name].Potentials[b.Difficulty], b.Score));
             });
+            list.Reverse();
             foreach(var i in Range(0, list.Count))
             {
                 var p = list[i];
-                list[i] = (p.Name, p.Difficulty, p.Score, i + 1);
+                list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1);
             }
             this.paints = list;
         }
@@ -141,6 +178,32 @@ namespace ScoreManager
                         throw new ArgumentException($"{index + 1} 行目({name}): 正しい形式ではありません");
                     }
                 }
+            }
+        }
+
+        private void AddScore(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if(this.manager[this.addDataSong.Text] is null)
+                {
+                    MessageBox.Show("正しい曲名を選択してください", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                var difficulty = StringToDifficulty(this.addDataDifficulty.Text);
+                if(difficulty is null)
+                {
+                    MessageBox.Show("正しい難易度を選択してください", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if(!int.TryParse(this.addDataScore.Text,out var score))
+                {
+                    MessageBox.Show("数値を入力してください", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                var best = this.manager[this.addDataSong.Text].Bests[difficulty.Value];
+                this.manager[this.addDataSong.Text].Bests[difficulty.Value] = Math.Max(best, score);
+                PaintReset();
+                PaintScoreData();
             }
         }
     }

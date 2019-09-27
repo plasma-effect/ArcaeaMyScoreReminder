@@ -49,6 +49,17 @@ namespace ScoreManager
             }
             return null;
         }
+        static public int? StringToDifficulty(string name)
+        {
+            foreach(var i in Enumerable.Range(0, 3))
+            {
+                if (difficultyToString[i] == name)
+                {
+                    return i;
+                }
+            }
+            return null;
+        }
 
         static public string DifficultyToString(int difficulty)
         {
@@ -59,11 +70,12 @@ namespace ScoreManager
             return null;
         }
 
+
         static public decimal GetPotential(decimal scorePotential,int points)
         {
             if (points < 980_0000)
             {
-                return scorePotential + ((decimal)points - 950_0000) / 30_0000;
+                return Math.Max(scorePotential + ((decimal)points - 950_0000) / 30_0000, default);
             }
             else if (points < 995_0000)
             {
@@ -77,6 +89,49 @@ namespace ScoreManager
             {
                 return scorePotential + 2.0m;
             }
+        }
+
+        static public decimal GetStep(decimal potential)
+        {
+            return 2.5m + 2.45m * Sqrt(potential);
+        }
+
+        static decimal Sqrt(decimal v)
+        {
+            if (v < 0)
+            {
+                throw new ArgumentOutOfRangeException($"非負の値が必要です");
+            }
+            else if (v == 0)
+            {
+                return 0m;
+            }
+            var ret = v / 2;
+            var prev = ret;
+            while (Math.Abs(ret - prev) < 0.00001m)
+            {
+                prev = ret;
+                ret = (prev + v / prev) / 2;
+            }
+            return ret;
+        }
+
+        static public decimal RoundDown(decimal v, int digit = 3)
+        {
+            var ret = decimal.Truncate(v);
+            v -= ret;
+            foreach (var c in Enumerable.Range(0, digit))
+            {
+                ret *= 10m;
+                v *= 10m;
+                ret += decimal.Truncate(v);
+                v -= decimal.Truncate(v);
+            }
+            foreach(var c in Enumerable.Range(0, digit))
+            {
+                ret /= 10m;
+            }
+            return ret;
         }
     }
 }

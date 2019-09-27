@@ -38,8 +38,12 @@
             this.BestPotential = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BestStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StepGL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StepAxiom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StepAxium = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StepFracture = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
+            this.addDataSong = new System.Windows.Forms.ComboBox();
+            this.addDataScore = new System.Windows.Forms.TextBox();
+            this.addDataDifficulty = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +63,8 @@
             this.BestPotential,
             this.BestStep,
             this.StepGL,
-            this.StepAxiom});
+            this.StepAxium,
+            this.StepFracture});
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
@@ -157,15 +162,25 @@
             this.StepGL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.StepGL.Width = 130;
             // 
-            // StepAxiom
+            // StepAxium
             // 
-            this.StepAxiom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.StepAxiom.HeaderText = "ステップ数(Axiom対立)";
-            this.StepAxiom.MinimumWidth = 10;
-            this.StepAxiom.Name = "StepAxiom";
-            this.StepAxiom.ReadOnly = true;
-            this.StepAxiom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StepAxiom.Width = 158;
+            this.StepAxium.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.StepAxium.HeaderText = "ステップ数(Axium対立)";
+            this.StepAxium.MinimumWidth = 10;
+            this.StepAxium.Name = "StepAxium";
+            this.StepAxium.ReadOnly = true;
+            this.StepAxium.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StepAxium.Width = 158;
+            // 
+            // StepFracture
+            // 
+            this.StepFracture.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.StepFracture.HeaderText = "ステップ数(FR光)";
+            this.StepFracture.MinimumWidth = 10;
+            this.StepFracture.Name = "StepFracture";
+            this.StepFracture.ReadOnly = true;
+            this.StepFracture.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StepFracture.Width = 129;
             // 
             // button1
             // 
@@ -179,11 +194,48 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.DataManagerClick);
             // 
+            // addDataSong
+            // 
+            this.addDataSong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addDataSong.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.addDataSong.FormattingEnabled = true;
+            this.addDataSong.Location = new System.Drawing.Point(1200, 778);
+            this.addDataSong.Name = "addDataSong";
+            this.addDataSong.Size = new System.Drawing.Size(250, 41);
+            this.addDataSong.TabIndex = 2;
+            // 
+            // addDataScore
+            // 
+            this.addDataScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addDataScore.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.addDataScore.Location = new System.Drawing.Point(1612, 778);
+            this.addDataScore.Name = "addDataScore";
+            this.addDataScore.Size = new System.Drawing.Size(150, 39);
+            this.addDataScore.TabIndex = 3;
+            this.addDataScore.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AddScore);
+            // 
+            // addDataDifficulty
+            // 
+            this.addDataDifficulty.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addDataDifficulty.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.addDataDifficulty.FormattingEnabled = true;
+            this.addDataDifficulty.Items.AddRange(new object[] {
+            "Past",
+            "Present",
+            "Future"});
+            this.addDataDifficulty.Location = new System.Drawing.Point(1456, 778);
+            this.addDataDifficulty.Name = "addDataDifficulty";
+            this.addDataDifficulty.Size = new System.Drawing.Size(150, 41);
+            this.addDataDifficulty.TabIndex = 4;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1774, 829);
+            this.Controls.Add(this.addDataDifficulty);
+            this.Controls.Add(this.addDataScore);
+            this.Controls.Add(this.addDataSong);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "MainForm";
@@ -191,12 +243,14 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
         private System.Windows.Forms.DataGridViewTextBoxColumn Song;
         private System.Windows.Forms.DataGridViewTextBoxColumn Difficulty;
@@ -206,8 +260,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn BestPotential;
         private System.Windows.Forms.DataGridViewTextBoxColumn BestStep;
         private System.Windows.Forms.DataGridViewTextBoxColumn StepGL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StepAxiom;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepAxium;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepFracture;
+        private System.Windows.Forms.ComboBox addDataSong;
+        private System.Windows.Forms.TextBox addDataScore;
+        private System.Windows.Forms.ComboBox addDataDifficulty;
     }
 }
 
