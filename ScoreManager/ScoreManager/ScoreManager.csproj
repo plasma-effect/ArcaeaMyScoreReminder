@@ -55,6 +55,18 @@
     <Compile Include="DataManagerForm.Designer.cs">
       <DependentUpon>DataManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditScoreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditScoreForm.Designer.cs">
+      <DependentUpon>EditScoreForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterForm.Designer.cs">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +79,12 @@
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="DataManagerForm.resx">
       <DependentUpon>DataManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditScoreForm.resx">
+      <DependentUpon>EditScoreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterForm.resx">
+      <DependentUpon>FilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

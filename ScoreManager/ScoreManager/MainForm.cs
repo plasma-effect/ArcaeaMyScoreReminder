@@ -206,5 +206,133 @@ namespace ScoreManager
                 PaintScoreData();
             }
         }
+
+        private void EditScore(object sender, EventArgs e)
+        {
+            using (var form = new EditScoreForm(this, this.manager))
+            {
+                form.ShowDialog();
+                PaintReset();
+                PaintScoreData();
+            }
+        }
+
+        public void PointDataSet(DataGridView view)
+        {
+            foreach (var i in Range(0, view.Rows.Count - 1))
+            {
+                var name = view[0, i].Value.ToString();
+                foreach (var j in Range(0, 3))
+                {
+                    if (int.TryParse(view[1 + j, i].Value.ToString(), out var score))
+                    {
+                        this.manager[name].Bests[j] = score;
+                    }
+                    else if (view[1 + j, i].Value.ToString() == "")
+                    {
+                        this.manager[name].Bests[j] = 0;
+                    }
+                }
+            }
+        }
+
+        private void FilterClick(object sender, EventArgs e)
+        {
+            using(var form = new FilterForm(this))
+            {
+                form.ShowDialog();
+            }
+            PaintScoreData();
+        }
+
+        public void SetFilter(Filter filter)
+        {
+            bool Check((string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank) data)
+            {
+                if (!filter.LevelFilters[data.Level])
+                {
+                    return false;
+                }
+                if (!filter.DifficultyFilters[data.Difficulty])
+                {
+                    return false;
+                }
+                if(filter.PotentialFilter is decimal potential)
+                {
+                    switch (filter.PotentialFlag)
+                    {
+                        case Filter.Comparison.more:
+                            if (!(potential < data.Potential))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.moreEqual:
+                            if (!(potential <= data.Potential))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.equal:
+                            if (!(potential == data.Potential))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.lessEqual:
+                            if (!(data.Potential <= potential))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.less:
+                            if (!(data.Potential < potential))
+                            {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+                if(filter.ScoreFilter is int score)
+                {
+                    switch (filter.ScoreFlag)
+                    {
+                        case Filter.Comparison.more:
+                            if (!(score < data.Score))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.moreEqual:
+                            if (!(score <= data.Score))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.equal:
+                            if (!(score == data.Score))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.lessEqual:
+                            if (!(data.Score <= score))
+                            {
+                                return false;
+                            }
+                            break;
+                        case Filter.Comparison.less:
+                            if (!(data.Score < score))
+                            {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+                return true;
+            }
+            PaintReset();
+            this.paints = this.paints.Where(Check);
+        }
     }
 }
