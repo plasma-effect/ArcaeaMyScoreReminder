@@ -76,6 +76,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScoreManager.cs" />
+    <Compile Include="TargetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TargetForm.Designer.cs">
+      <DependentUpon>TargetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="DataManagerForm.resx">
       <DependentUpon>DataManagerForm.cs</DependentUpon>
@@ -98,6 +104,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TargetForm.resx">
+      <DependentUpon>TargetForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

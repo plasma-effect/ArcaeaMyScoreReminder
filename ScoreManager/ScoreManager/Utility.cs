@@ -34,7 +34,7 @@ namespace ScoreManager
 
         static public int? StringToLevel(string name)
         {
-            if(stringToLevel.ContainsKey(name))
+            if (stringToLevel.ContainsKey(name))
             {
                 return stringToLevel[name];
             }
@@ -51,7 +51,7 @@ namespace ScoreManager
         }
         static public int? StringToDifficulty(string name)
         {
-            foreach(var i in Enumerable.Range(0, 3))
+            foreach (var i in Enumerable.Range(0, 3))
             {
                 if (difficultyToString[i] == name)
                 {
@@ -71,7 +71,7 @@ namespace ScoreManager
         }
 
 
-        static public decimal GetPotential(decimal scorePotential,int points)
+        static public decimal GetPotential(decimal scorePotential, int points)
         {
             if (points < 980_0000)
             {
@@ -94,6 +94,11 @@ namespace ScoreManager
         static public decimal GetStep(decimal potential)
         {
             return 2.5m + 2.45m * Sqrt(potential);
+        }
+
+        static public decimal GetStep(decimal scorePotential,int point)
+        {
+            return GetStep(GetPotential(scorePotential, point));
         }
 
         static decimal Sqrt(decimal v)
@@ -127,11 +132,36 @@ namespace ScoreManager
                 ret += decimal.Truncate(v);
                 v -= decimal.Truncate(v);
             }
-            foreach(var c in Enumerable.Range(0, digit))
+            foreach (var c in Enumerable.Range(0, digit))
             {
                 ret /= 10m;
             }
             return ret;
+        }
+
+        static public int? PartitionPoint(int min, int max, Func<int, bool> pred)
+        {
+            if (!pred(max))
+            {
+                return null;
+            }
+            if (pred(min))
+            {
+                return min;
+            }
+            while (max - min > 1)
+            {
+                var mid = (max + min) / 2;
+                if (pred(mid))
+                {
+                    max = mid;
+                }
+                else
+                {
+                    min = mid;
+                }
+            }
+            return max;
         }
     }
 }

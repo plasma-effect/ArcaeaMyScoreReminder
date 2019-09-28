@@ -334,5 +334,13 @@ namespace ScoreManager
             PaintReset();
             this.paints = this.paints.Where(Check);
         }
+
+        private void TargetClick(object sender, EventArgs e)
+        {
+            using (var form = new TargetForm(this.manager))
+            {
+                form.ShowDialog();
+            }
+        }
     }
 }

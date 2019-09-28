@@ -267,13 +267,13 @@
             "より小さい"});
             this.potentialUpperOrLower.Location = new System.Drawing.Point(352, 40);
             this.potentialUpperOrLower.Name = "potentialUpperOrLower";
-            this.potentialUpperOrLower.Size = new System.Drawing.Size(121, 32);
+            this.potentialUpperOrLower.Size = new System.Drawing.Size(210, 32);
             this.potentialUpperOrLower.TabIndex = 18;
             // 
             // complete
             // 
             this.complete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.complete.Location = new System.Drawing.Point(352, 372);
+            this.complete.Location = new System.Drawing.Point(412, 372);
             this.complete.Name = "complete";
             this.complete.Size = new System.Drawing.Size(150, 45);
             this.complete.TabIndex = 19;
@@ -284,7 +284,7 @@
             // filterReset
             // 
             this.filterReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterReset.Location = new System.Drawing.Point(352, 321);
+            this.filterReset.Location = new System.Drawing.Point(412, 321);
             this.filterReset.Name = "filterReset";
             this.filterReset.Size = new System.Drawing.Size(150, 45);
             this.filterReset.TabIndex = 20;
@@ -319,14 +319,14 @@
             "より小さい"});
             this.scoreUpperOrLower.Location = new System.Drawing.Point(352, 104);
             this.scoreUpperOrLower.Name = "scoreUpperOrLower";
-            this.scoreUpperOrLower.Size = new System.Drawing.Size(121, 32);
+            this.scoreUpperOrLower.Size = new System.Drawing.Size(210, 32);
             this.scoreUpperOrLower.TabIndex = 23;
             // 
             // FilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 429);
+            this.ClientSize = new System.Drawing.Size(574, 429);
             this.Controls.Add(this.scoreUpperOrLower);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.scoreFilter);

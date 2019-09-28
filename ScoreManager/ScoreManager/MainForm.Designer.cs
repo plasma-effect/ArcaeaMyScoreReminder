@@ -265,6 +265,7 @@
             this.button5.TabIndex = 8;
             this.button5.Text = "目標スコア";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.TargetClick);
             // 
             // MainForm
             // 
