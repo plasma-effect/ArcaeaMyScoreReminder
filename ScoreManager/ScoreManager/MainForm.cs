@@ -106,6 +106,14 @@ namespace ScoreManager
                 list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1);
             }
             this.paints = list;
+
+            var sum = 0.0m;
+            const int best = 30;
+            foreach(var i in Range(0, Math.Min(best, list.Count)))
+            {
+                sum += list[i].Potential;
+            }
+            this.Text = $"Arcaea Score Manager [Least Potential: {RoundDown(sum / (best + 10), 2)}]";
         }
 
         private void MainFormClosed(object sender, FormClosedEventArgs e)
