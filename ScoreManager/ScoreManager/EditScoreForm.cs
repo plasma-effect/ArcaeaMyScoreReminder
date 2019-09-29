@@ -16,16 +16,14 @@ namespace ScoreManager
         {
             InitializeComponent();
             this.MyParent = parent;
-            var index = 0;
-            foreach (var name in manager)
+            foreach (var (name, index) in manager.Indexed())
             {
                 this.dataGridView1.Rows.Add();
                 this.dataGridView1[0, index].Value = name;
-                foreach(var i in Enumerable.Range(0, 3))
+                foreach (var i in Enumerable.Range(0, 3))
                 {
                     this.dataGridView1[1 + i, index].Value = manager[name].Bests[i];
                 }
-                ++index;
             }
         }
         MainForm MyParent;

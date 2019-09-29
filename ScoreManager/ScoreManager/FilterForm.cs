@@ -45,11 +45,11 @@ namespace ScoreManager
 
         private void FilterReset(object sender, EventArgs e)
         {
-            foreach(var filter in this.levelFilters)
+            foreach (var filter in this.levelFilters)
             {
                 filter.Checked = true;
             }
-            foreach(var filter in this.difficultyFilters)
+            foreach (var filter in this.difficultyFilters)
             {
                 filter.Checked = true;
             }
@@ -114,5 +114,4 @@ namespace ScoreManager
             }
         }
     }
-
 }

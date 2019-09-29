@@ -342,5 +342,13 @@ namespace ScoreManager
                 form.ShowDialog();
             }
         }
+
+        private void StatisticsClick(object sender, EventArgs e)
+        {
+            using(var form = new StatisticsForm(this.manager))
+            {
+                form.ShowDialog();
+            }
+        }
     }
 }

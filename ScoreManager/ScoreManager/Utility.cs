@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Linq.Enumerable;
 
 namespace ScoreManager
 {
@@ -51,7 +52,7 @@ namespace ScoreManager
         }
         static public int? StringToDifficulty(string name)
         {
-            foreach (var i in Enumerable.Range(0, 3))
+            foreach (var i in Range(0, 3))
             {
                 if (difficultyToString[i] == name)
                 {
@@ -125,14 +126,14 @@ namespace ScoreManager
         {
             var ret = decimal.Truncate(v);
             v -= ret;
-            foreach (var c in Enumerable.Range(0, digit))
+            foreach (var c in Range(0, digit))
             {
                 ret *= 10m;
                 v *= 10m;
                 ret += decimal.Truncate(v);
                 v -= decimal.Truncate(v);
             }
-            foreach (var c in Enumerable.Range(0, digit))
+            foreach (var c in Range(0, digit))
             {
                 ret /= 10m;
             }
@@ -162,6 +163,29 @@ namespace ScoreManager
                 }
             }
             return max;
+        }
+
+        static public int MaxElemental<T>(params T[] ar)
+            where T : IComparable<T>
+        {
+            var maxindex = 0;
+            foreach (var i in Range(1, ar.Length - 1))
+            {
+                if (ar[maxindex].CompareTo(ar[i]) < 0)
+                {
+                    maxindex = i;
+                }
+            }
+            return maxindex;
+        }
+
+        static public IEnumerable<(T, int)> Indexed<T>(this IEnumerable<T> ts)
+        {
+            var index = -1;
+            foreach(var v in ts)
+            {
+                yield return (v, ++index);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ScoreManager
             this.targetType.SelectedIndex = 0;
             this.manager = manager;
             var index = 0;
-            foreach(var name in manager)
+            foreach (var name in manager)
             {
                 this.dataGridView1.Rows.Add();
                 this.dataGridView1[0, index].Value = name;
@@ -46,8 +46,7 @@ namespace ScoreManager
             if (decimal.TryParse(this.targetValue.Text, out var target))
             {
                 this.dataGridView1.Rows.Clear();
-                var index = 0;
-                foreach (var name in this.manager)
+                foreach (var (name, index) in this.manager.Indexed())
                 {
                     if (this.manager[name] is ScoreManager.Unit unit)
                     {
@@ -61,7 +60,6 @@ namespace ScoreManager
                             SetValue(1, index, past);
                             SetValue(2, index, present);
                             SetValue(3, index, future);
-                            ++index;
                         }
                     }
                 }
@@ -72,34 +70,34 @@ namespace ScoreManager
             }
         }
 
-        private Func<int,bool> TargetPotential(decimal target,decimal scorePotential)
+        private Func<int, bool> TargetPotential(decimal target, decimal scorePotential)
         {
             return v => target <= GetPotential(scorePotential, v);
         }
 
-        private Func<int,bool> TargetBaseStep(decimal target,decimal scorePotential)
+        private Func<int, bool> TargetBaseStep(decimal target, decimal scorePotential)
         {
             return v => target <= GetStep(scorePotential, v);
         }
 
-        private Func<int,bool> TargetGrievousLady(decimal target,decimal scorePotential)
+        private Func<int, bool> TargetGrievousLady(decimal target, decimal scorePotential)
         {
             return v => target <= GetStep(scorePotential, v) * 102m / 50m;
         }
 
-        private Func<int,bool> TargetAxium(decimal target,decimal scorePotential)
+        private Func<int, bool> TargetAxium(decimal target, decimal scorePotential)
         {
             return v => target <= GetStep(scorePotential, v) * 90m / 50m;
         }
 
-        private Func<int,bool> TargetFracture(decimal target,decimal scorePotential)
+        private Func<int, bool> TargetFracture(decimal target, decimal scorePotential)
         {
             return v => target <= GetStep(scorePotential, v) * 99m / 50m;
         }
 
         private void SetValue(int column, int row, int? score)
         {
-            if(score is int point)
+            if (score is int point)
             {
                 if (point < 900_0000)
                 {

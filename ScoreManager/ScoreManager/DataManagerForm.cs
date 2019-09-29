@@ -19,8 +19,7 @@ namespace ScoreManager
         {
             InitializeComponent();
             this.MyMainForm = main;
-            var index = 0;
-            foreach (var name in manager)
+            foreach (var (name, index) in manager.Indexed())
             {
                 this.songDataGrid[0, index].Value = name;
                 foreach (var i in Range(0, 3))
@@ -29,7 +28,6 @@ namespace ScoreManager
                     this.songDataGrid[3 * i + 2, index].Value = manager[name].Potentials[i];
                     this.songDataGrid[3 * i + 3, index].Value = manager[name].Notes[i];
                 }
-                ++index;
             }
         }
 
