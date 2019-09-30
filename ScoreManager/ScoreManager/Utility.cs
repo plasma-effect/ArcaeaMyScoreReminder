@@ -114,7 +114,7 @@ namespace ScoreManager
             }
             var ret = v / 2;
             var prev = ret;
-            while (Math.Abs(ret - prev) < 0.00001m)
+            while (Math.Abs(ret - prev) > 0.00001m)
             {
                 prev = ret;
                 ret = (prev + v / prev) / 2;

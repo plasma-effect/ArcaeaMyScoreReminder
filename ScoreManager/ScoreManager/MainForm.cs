@@ -42,7 +42,7 @@ namespace ScoreManager
         }
 
         ScoreManager manager;
-        IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank)> paints;
+        IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> paints;
 
         private void DataManagerClick(object sender, EventArgs e)
         {
@@ -62,48 +62,45 @@ namespace ScoreManager
         private void PaintScoreData()
         {
             this.dataGridView1.Rows.Clear();
-            var index = 0;
             foreach (var data in this.paints)
             {
                 var potential = GetPotential(data.Potential, data.Score);
                 var step = GetStep(potential);
-                this.dataGridView1.Rows.Add();
-                this.dataGridView1[0, index].Value = data.Rank;
-                this.dataGridView1[1, index].Value = data.Name;
-                this.dataGridView1[2, index].Value = DifficultyToString(data.Difficulty);
-                this.dataGridView1[3, index].Value = LevelToString(data.Level);
-                this.dataGridView1[4, index].Value = data.Potential;
-                this.dataGridView1[5, index].Value = data.Score;
-                this.dataGridView1[6, index].Value = RoundDown(potential);
-                this.dataGridView1[7, index].Value = RoundDown(step);
-                this.dataGridView1[8, index].Value = RoundDown(step * 102m / 50m, 1);
-                this.dataGridView1[9, index].Value = RoundDown(step * 90m / 50m, 1);
-                this.dataGridView1[10, index].Value = RoundDown(step * 99m / 50m, 1);
-                ++index;
+                this.dataGridView1.Rows.Add(
+                    data.Rank,
+                    data.Name,
+                    DifficultyToString(data.Difficulty),
+                    LevelToString(data.Level),
+                    data.Potential,
+                    data.Score,
+                    RoundDown(potential),
+                    RoundDown(step),
+                    RoundDown(step * 102m / 50m, 1),
+                    RoundDown(step * 90m / 50m, 1),
+                    RoundDown(step * 99m / 50m, 1));
             }
         }
 
         private void PaintReset()
         {
-            var list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank)>();
+            var list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)>();
             foreach (var name in this.manager)
             {
+                var unit = this.manager[name];
                 foreach (var i in Range(0, 3))
                 {
-                    list.Add((name, i, this.manager[name].Levels[i], this.manager[name].Potentials[i], this.manager[name].Bests[i], 0));
+                    list.Add((name, i, unit.Levels[i], unit.Potentials[i], unit.Bests[i], 0, GetPotential(unit.Potentials[i], unit.Bests[i])));
                 }
             }
             list.Sort((a, b) =>
             {
-                return
-                GetPotential(this.manager[a.Name].Potentials[a.Difficulty], a.Score)
-                .CompareTo(GetPotential(this.manager[b.Name].Potentials[b.Difficulty], b.Score));
+                return a.CalcPotential.CompareTo(b.CalcPotential);
             });
             list.Reverse();
             foreach(var i in Range(0, list.Count))
             {
                 var p = list[i];
-                list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1);
+                list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1, p.CalcPotential);
             }
             this.paints = list;
 
@@ -111,14 +108,14 @@ namespace ScoreManager
             const int best = 30;
             foreach(var i in Range(0, Math.Min(best, list.Count)))
             {
-                sum += list[i].Potential;
+                sum += GetPotential(list[i].Potential, list[i].Score);
             }
             this.Text = $"Arcaea Score Manager [Least Potential: {RoundDown(sum / (best + 10), 2)}]";
         }
 
-        private void MainFormClosed(object sender, FormClosedEventArgs e)
+        private void SaveData()
         {
-            using(var stream = new FileStream(saveAddress, FileMode.OpenOrCreate))
+            using (var stream = new FileStream(saveAddress, FileMode.OpenOrCreate))
             {
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this.manager);
@@ -128,7 +125,7 @@ namespace ScoreManager
         public void ScoreDataSet(DataGridView view)
         {
             var must = new SortedSet<string>(this.manager);
-            foreach (var name in Range(0, view.Rows.Count - 1).Select(i => view[0, i].ToString()))
+            foreach (var name in Range(0, view.Rows.Count - 1).Select(i => view[0, i].Value.ToString()))
             {
                 if (must.Contains(name))
                 {
@@ -137,7 +134,13 @@ namespace ScoreManager
             }
             if (must.Count != 0)
             {
-                throw new ArgumentException("楽曲の削除には対応していません");
+                var builder = new StringBuilder();
+                builder.AppendLine("楽曲の削除には対応していません");
+                foreach(var name in must)
+                {
+                    builder.AppendLine(name);
+                }
+                throw new ArgumentException(builder.ToString());
             }
             foreach (var index in Range(0, view.Rows.Count - 1))
             {
@@ -187,6 +190,7 @@ namespace ScoreManager
                     }
                 }
             }
+            SaveData();
         }
 
         private void AddScore(object sender, KeyPressEventArgs e)
@@ -210,6 +214,7 @@ namespace ScoreManager
                 }
                 var best = this.manager[this.addDataSong.Text].Bests[difficulty.Value];
                 this.manager[this.addDataSong.Text].Bests[difficulty.Value] = Math.Max(best, score);
+                SaveData();
                 PaintReset();
                 PaintScoreData();
             }
@@ -236,12 +241,9 @@ namespace ScoreManager
                     {
                         this.manager[name].Bests[j] = score;
                     }
-                    else if (view[1 + j, i].Value.ToString() == "")
-                    {
-                        this.manager[name].Bests[j] = 0;
-                    }
                 }
             }
+            SaveData();
         }
 
         private void FilterClick(object sender, EventArgs e)
@@ -255,7 +257,7 @@ namespace ScoreManager
 
         public void SetFilter(Filter filter)
         {
-            bool Check((string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank) data)
+            bool Check((string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential) data)
             {
                 if (!filter.LevelFilters[data.Level])
                 {

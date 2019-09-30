@@ -75,5 +75,7 @@ namespace ScoreManager
                 return null;
             }
         }
+
+        public int Count => this.data.Count;
     }
 }

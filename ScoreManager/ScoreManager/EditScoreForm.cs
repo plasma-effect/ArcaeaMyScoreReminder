@@ -16,9 +16,9 @@ namespace ScoreManager
         {
             InitializeComponent();
             this.MyParent = parent;
+            this.dataGridView1.Rows.Add(manager.Count);
             foreach (var (name, index) in manager.Indexed())
             {
-                this.dataGridView1.Rows.Add();
                 this.dataGridView1[0, index].Value = name;
                 foreach (var i in Enumerable.Range(0, 3))
                 {

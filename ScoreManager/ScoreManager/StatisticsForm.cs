@@ -16,10 +16,10 @@ namespace ScoreManager
         public StatisticsForm(ScoreManager manager)
         {
             InitializeComponent();
+            this.dataGridView1.Rows.Add(manager.Count);
             foreach (var (name, index) in manager.Indexed())
             {
                 var unit = manager[name];
-                this.dataGridView1.Rows.Add();
                 var past = GetPotential(unit.Potentials[0], unit.Bests[0]);
                 var present = GetPotential(unit.Potentials[1], unit.Bests[1]);
                 var future = GetPotential(unit.Potentials[2], unit.Bests[2]);

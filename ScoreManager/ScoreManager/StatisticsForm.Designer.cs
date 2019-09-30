@@ -51,7 +51,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(750, 705);
+            this.dataGridView1.Size = new System.Drawing.Size(950, 705);
             this.dataGridView1.TabIndex = 0;
             // 
             // Song
@@ -94,7 +94,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 729);
+            this.ClientSize = new System.Drawing.Size(974, 729);
             this.Controls.Add(this.dataGridView1);
             this.Name = "StatisticsForm";
             this.Text = "StatisticsForm";

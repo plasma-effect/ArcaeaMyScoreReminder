@@ -19,8 +19,8 @@ namespace ScoreManager
             InitializeComponent();
             this.targetType.SelectedIndex = 0;
             this.manager = manager;
-            var index = 0;
-            foreach (var name in manager)
+            this.dataGridView1.Rows.Add(manager.Count);
+            foreach (var (name, index) in manager.Indexed())
             {
                 this.dataGridView1.Rows.Add();
                 this.dataGridView1[0, index].Value = name;
@@ -28,7 +28,6 @@ namespace ScoreManager
                 {
                     this.dataGridView1[1 + i, index].Value = 0;
                 }
-                ++index;
             }
             this.actions = new Func<decimal, decimal, Func<int, bool>>[5];
             this.actions[0] = TargetPotential;
@@ -45,7 +44,6 @@ namespace ScoreManager
             var action = this.actions[this.targetType.SelectedIndex];
             if (decimal.TryParse(this.targetValue.Text, out var target))
             {
-                this.dataGridView1.Rows.Clear();
                 foreach (var (name, index) in this.manager.Indexed())
                 {
                     if (this.manager[name] is ScoreManager.Unit unit)
@@ -53,14 +51,10 @@ namespace ScoreManager
                         var past = PartitionPoint(0, 1000_0000 + unit.Notes[0], action(target, unit.Potentials[0]));
                         var present = PartitionPoint(0, 1000_0000 + unit.Notes[1], action(target, unit.Potentials[1]));
                         var future = PartitionPoint(0, 1000_0000 + unit.Notes[2], action(target, unit.Potentials[2]));
-                        if (past.HasValue || present.HasValue || future.HasValue)
-                        {
-                            this.dataGridView1.Rows.Add();
-                            this.dataGridView1[0, index].Value = name;
-                            SetValue(1, index, past);
-                            SetValue(2, index, present);
-                            SetValue(3, index, future);
-                        }
+                        this.dataGridView1[0, index].Value = name;
+                        SetValue(1, index, past);
+                        SetValue(2, index, present);
+                        SetValue(3, index, future);
                     }
                 }
             }

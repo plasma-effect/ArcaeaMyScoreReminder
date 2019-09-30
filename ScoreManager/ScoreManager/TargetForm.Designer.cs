@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.targetValue = new System.Windows.Forms.TextBox();
-            this.targetType = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.SongName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Past = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Present = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Future = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.targetValue = new System.Windows.Forms.TextBox();
+            this.targetType = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,43 +54,8 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(650, 558);
+            this.dataGridView1.Size = new System.Drawing.Size(950, 558);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // targetValue
-            // 
-            this.targetValue.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.targetValue.Location = new System.Drawing.Point(12, 12);
-            this.targetValue.Name = "targetValue";
-            this.targetValue.Size = new System.Drawing.Size(133, 39);
-            this.targetValue.TabIndex = 1;
-            // 
-            // targetType
-            // 
-            this.targetType.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.targetType.FormattingEnabled = true;
-            this.targetType.Items.AddRange(new object[] {
-            "譜面別ポテンシャル",
-            "ステップ数(基礎)",
-            "ステップ数(GL対立)",
-            "ステップ数(Axium対立)",
-            "ステップ数(FR光)"});
-            this.targetType.Location = new System.Drawing.Point(151, 12);
-            this.targetType.Name = "targetType";
-            this.targetType.Size = new System.Drawing.Size(350, 41);
-            this.targetType.TabIndex = 2;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(507, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(155, 39);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "適用";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Accept);
             // 
             // SongName
             // 
@@ -128,11 +93,46 @@
             this.Future.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Future.Width = 120;
             // 
+            // targetValue
+            // 
+            this.targetValue.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.targetValue.Location = new System.Drawing.Point(12, 12);
+            this.targetValue.Name = "targetValue";
+            this.targetValue.Size = new System.Drawing.Size(133, 39);
+            this.targetValue.TabIndex = 1;
+            // 
+            // targetType
+            // 
+            this.targetType.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.targetType.FormattingEnabled = true;
+            this.targetType.Items.AddRange(new object[] {
+            "譜面別ポテンシャル",
+            "ステップ数(基礎)",
+            "ステップ数(GL対立)",
+            "ステップ数(Axium対立)",
+            "ステップ数(FR光)"});
+            this.targetType.Location = new System.Drawing.Point(151, 12);
+            this.targetType.Name = "targetType";
+            this.targetType.Size = new System.Drawing.Size(350, 41);
+            this.targetType.TabIndex = 2;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(507, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(455, 39);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "適用";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Accept);
+            // 
             // TargetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 629);
+            this.ClientSize = new System.Drawing.Size(974, 629);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.targetType);
             this.Controls.Add(this.targetValue);

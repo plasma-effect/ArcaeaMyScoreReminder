@@ -19,9 +19,9 @@ namespace ScoreManager
         {
             InitializeComponent();
             this.MyMainForm = main;
+            this.songDataGrid.Rows.Add(manager.Count);
             foreach (var (name, index) in manager.Indexed())
             {
-                this.songDataGrid.Rows.Add();
                 this.songDataGrid[0, index].Value = name;
                 foreach (var i in Range(0, 3))
                 {
