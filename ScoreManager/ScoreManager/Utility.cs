@@ -113,12 +113,12 @@ namespace ScoreManager
                 return 0m;
             }
             var ret = v / 2;
-            var prev = ret;
-            while (Math.Abs(ret - prev) > 0.00001m)
+            decimal prev;
+            do
             {
                 prev = ret;
                 ret = (prev + v / prev) / 2;
-            }
+            } while (Math.Abs(ret - prev) > 0.00001m);
             return ret;
         }
 

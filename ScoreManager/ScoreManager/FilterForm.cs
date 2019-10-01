@@ -13,11 +13,9 @@ namespace ScoreManager
 {
     public partial class FilterForm : Form
     {
-        public FilterForm(MainForm form)
+        public FilterForm(MainForm form, Filter filter)
         {
             InitializeComponent();
-            this.potentialUpperOrLower.SelectedIndex = 0;
-            this.scoreUpperOrLower.SelectedIndex = 0;
             this.levelFilters = new CheckBox[11];
             this.levelFilters[0] = this.levelFilter0;
             this.levelFilters[1] = this.levelFilter1;
@@ -37,6 +35,24 @@ namespace ScoreManager
             this.difficultyFilters[2] = this.difficultyFilter2;
 
             this.myParent = form;
+            foreach(var i in Range(0, 11))
+            {
+                this.levelFilters[i].Checked = filter.LevelFilters[i];
+            }
+            foreach(var i in Range(0, 3))
+            {
+                this.difficultyFilters[i].Checked = filter.DifficultyFilters[i];
+            }
+            this.potentialUpperOrLower.SelectedIndex = (int)filter.PotentialFlag;
+            this.scoreUpperOrLower.SelectedIndex = (int)filter.ScoreFlag;
+            if(filter.PotentialFilter is decimal potential)
+            {
+                this.potentialFilter.Text = potential.ToString();
+            }
+            if(filter.ScoreFilter is int score)
+            {
+                this.scoreFilter.Text = score.ToString();
+            }
         }
 
         CheckBox[] levelFilters;
@@ -111,6 +127,24 @@ namespace ScoreManager
             {
                 this.ScoreFilter = s;
                 this.ScoreFlag = (Comparison)scoreFlag.SelectedIndex;
+            }
+        }
+
+        public Filter()
+        {
+            this.LevelFilters = new bool[11];
+            this.DifficultyFilters = new bool[3];
+            this.PotentialFilter = null;
+            this.PotentialFlag = default;
+            this.ScoreFilter = null;
+            this.ScoreFlag = default;
+            foreach(var i in Range(0, 11))
+            {
+                this.LevelFilters[i] = true;
+            }
+            foreach(var i in Range(0, 3))
+            {
+                this.DifficultyFilters[i] = true;
             }
         }
     }

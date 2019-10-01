@@ -21,6 +21,7 @@ namespace ScoreManager
         public MainForm()
         {
             InitializeComponent();
+            this.filter = new Filter();
             if (File.Exists(saveAddress))
             {
                 using (var stream = new FileStream(saveAddress, FileMode.Open))
@@ -41,6 +42,7 @@ namespace ScoreManager
             PaintScoreData();
         }
 
+        Filter filter;
         ScoreManager manager;
         IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> paints;
 
@@ -97,16 +99,21 @@ namespace ScoreManager
                 return a.CalcPotential.CompareTo(b.CalcPotential);
             });
             list.Reverse();
-            foreach(var i in Range(0, list.Count))
+            foreach (var i in Range(0, list.Count))
             {
                 var p = list[i];
                 list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1, p.CalcPotential);
             }
             this.paints = list;
+            SetFilter(this.filter);
+            ParsonalPotentialCalc(list);
+        }
 
+        private void ParsonalPotentialCalc(List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> list)
+        {
             var sum = 0.0m;
             const int best = 30;
-            foreach(var i in Range(0, Math.Min(best, list.Count)))
+            foreach (var i in Range(0, Math.Min(best, list.Count)))
             {
                 sum += GetPotential(list[i].Potential, list[i].Score);
             }
@@ -248,7 +255,7 @@ namespace ScoreManager
 
         private void FilterClick(object sender, EventArgs e)
         {
-            using(var form = new FilterForm(this))
+            using (var form = new FilterForm(this, this.filter))
             {
                 form.ShowDialog();
             }
@@ -257,6 +264,7 @@ namespace ScoreManager
 
         public void SetFilter(Filter filter)
         {
+            this.filter = filter;
             bool Check((string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential) data)
             {
                 if (!filter.LevelFilters[data.Level])
@@ -341,7 +349,6 @@ namespace ScoreManager
                 }
                 return true;
             }
-            PaintReset();
             this.paints = this.paints.Where(Check);
         }
 
