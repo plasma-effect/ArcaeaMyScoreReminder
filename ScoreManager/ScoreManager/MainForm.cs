@@ -45,6 +45,7 @@ namespace ScoreManager
         Filter filter;
         ScoreManager manager;
         IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> paints;
+        List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> list;
 
         private void DataManagerClick(object sender, EventArgs e)
         {
@@ -85,28 +86,28 @@ namespace ScoreManager
 
         private void PaintReset()
         {
-            var list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)>();
+            this.list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)>();
             foreach (var name in this.manager)
             {
                 var unit = this.manager[name];
                 foreach (var i in Range(0, 3))
                 {
-                    list.Add((name, i, unit.Levels[i], unit.Potentials[i], unit.Bests[i], 0, GetPotential(unit.Potentials[i], unit.Bests[i])));
+                    this.list.Add((name, i, unit.Levels[i], unit.Potentials[i], unit.Bests[i], 0, GetPotential(unit.Potentials[i], unit.Bests[i])));
                 }
             }
-            list.Sort((a, b) =>
+            this.list.Sort((a, b) =>
             {
                 return a.CalcPotential.CompareTo(b.CalcPotential);
             });
-            list.Reverse();
-            foreach (var i in Range(0, list.Count))
+            this.list.Reverse();
+            foreach (var i in Range(0, this.list.Count))
             {
-                var p = list[i];
-                list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1, p.CalcPotential);
+                var p = this.list[i];
+                this.list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1, p.CalcPotential);
             }
-            this.paints = list;
+            this.paints = this.list;
             SetFilter(this.filter);
-            ParsonalPotentialCalc(list);
+            ParsonalPotentialCalc(this.list);
         }
 
         private void ParsonalPotentialCalc(List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> list)
@@ -117,7 +118,9 @@ namespace ScoreManager
             {
                 sum += GetPotential(list[i].Potential, list[i].Score);
             }
-            this.Text = $"Arcaea Score Manager [Least Potential: {RoundDown(sum / (best + 10), 2)}]";
+            var min = RoundDown(sum / (best + 10), 2);
+            var max = RoundDown((sum + 10 * GetPotential(list[0].Potential, list[0].Score)) / (best + 10), 2);
+            this.Text = $"Arcaea Score Manager [Min Potential: {min}, Max Potential: {max}]";
         }
 
         private void SaveData()
@@ -220,10 +223,19 @@ namespace ScoreManager
                     MessageBox.Show("数値を入力してください", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 var best = this.manager[this.addDataSong.Text].Bests[difficulty.Value];
-                this.manager[this.addDataSong.Text].Bests[difficulty.Value] = Math.Max(best, score);
-                SaveData();
-                PaintReset();
-                PaintScoreData();
+                if (best < score)
+                {
+                    var prev = this.list.Find(d => d.Name == this.addDataSong.Text && d.Difficulty == difficulty);
+                    this.manager[this.addDataSong.Text].Bests[difficulty.Value] = score;
+                    SaveData();
+                    PaintReset();
+                    PaintScoreData();
+                    var now = this.list.Find(d => d.Name == this.addDataSong.Text && d.Difficulty == difficulty);
+                    StatusTextSet($@"""{this.addDataSong.Text}""の自己ベストを更新しました：[Score: {prev.Score}, Potential: {prev.CalcPotential}, Rank: {prev.Rank}]→[Score: {now.Score}, Potential: {now.CalcPotential}, Rank: {now.Rank}]");
+                }
+                this.addDataSong.Text = "";
+                this.addDataDifficulty.SelectedIndex = -1;
+                this.addDataScore.Text = "";
             }
         }
 
@@ -250,6 +262,7 @@ namespace ScoreManager
                     }
                 }
             }
+            StatusTextSet("スコア記録を変更しました");
             SaveData();
         }
 
@@ -257,9 +270,12 @@ namespace ScoreManager
         {
             using (var form = new FilterForm(this, this.filter))
             {
-                form.ShowDialog();
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    StatusTextSet("フィルター設定を変更しました");
+                    PaintScoreData();
+                }
             }
-            PaintScoreData();
         }
 
         public void SetFilter(Filter filter)
@@ -349,7 +365,7 @@ namespace ScoreManager
                 }
                 return true;
             }
-            this.paints = this.paints.Where(Check);
+            this.paints = this.list.Where(Check);
         }
 
         private void TargetClick(object sender, EventArgs e)
@@ -366,6 +382,11 @@ namespace ScoreManager
             {
                 form.ShowDialog();
             }
+        }
+
+        public void StatusTextSet(string str)
+        {
+            this.statusText.Text = str;
         }
     }
 }
