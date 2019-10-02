@@ -19,17 +19,11 @@ namespace ScoreManager
             InitializeComponent();
             this.targetType.SelectedIndex = 0;
             this.manager = manager;
-            this.dataGridView1.Rows.Add(manager.Count);
             foreach (var (name, index) in manager.Indexed())
             {
-                this.dataGridView1.Rows.Add();
-                this.dataGridView1[0, index].Value = name;
-                foreach (var i in Range(0, 3))
-                {
-                    this.dataGridView1[1 + i, index].Value = 0;
-                }
+                this.dataGridView1.Rows.Add(name, 0, 0, 0);
             }
-            this.actions = new Func<decimal, decimal, Func<int, bool>>[5];
+            this.actions = new Func<decimal, decimal, int, Func<int, bool>>[5];
             this.actions[0] = TargetPotential;
             this.actions[1] = TargetBaseStep;
             this.actions[2] = TargetGrievousLady;
@@ -37,7 +31,7 @@ namespace ScoreManager
             this.actions[4] = TargetFracture;
         }
         ScoreManager manager;
-        Func<decimal, decimal, Func<int, bool>>[] actions;
+        Func<decimal, decimal, int, Func<int, bool>>[] actions;
 
         private void Accept(object sender, EventArgs e)
         {
@@ -48,9 +42,9 @@ namespace ScoreManager
                 {
                     if (this.manager[name] is ScoreManager.Unit unit)
                     {
-                        var past = PartitionPoint(0, 1000_0000 + unit.Notes[0], action(target, unit.Potentials[0]));
-                        var present = PartitionPoint(0, 1000_0000 + unit.Notes[1], action(target, unit.Potentials[1]));
-                        var future = PartitionPoint(0, 1000_0000 + unit.Notes[2], action(target, unit.Potentials[2]));
+                        var past = (int?)(1000_0000L * PartitionPoint(0, unit.Notes[0], action(target, unit.Potentials[0], unit.Notes[0])) / unit.Notes[0]);
+                        var present = (int?)(1000_0000L * PartitionPoint(0, unit.Notes[1], action(target, unit.Potentials[1], unit.Notes[1])) / unit.Notes[1]);
+                        var future = (int?)(1000_0000L * PartitionPoint(0, unit.Notes[2], action(target, unit.Potentials[2], unit.Notes[2])) / unit.Notes[2]);
                         this.dataGridView1[0, index].Value = name;
                         SetValue(1, index, past);
                         SetValue(2, index, present);
@@ -64,61 +58,41 @@ namespace ScoreManager
             }
         }
 
-        private Func<int, bool> TargetPotential(decimal target, decimal scorePotential)
+        private Func<int, bool> TargetPotential(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetPotential(scorePotential, v);
+            return v => target <= GetPotential(scorePotential, (int)(1000_0000L * v / notes));
         }
 
-        private Func<int, bool> TargetBaseStep(decimal target, decimal scorePotential)
+        private Func<int, bool> TargetBaseStep(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, v);
+            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes));
         }
 
-        private Func<int, bool> TargetGrievousLady(decimal target, decimal scorePotential)
+        private Func<int, bool> TargetGrievousLady(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, v) * 102m / 50m;
+            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 102m / 50m;
         }
 
-        private Func<int, bool> TargetAxium(decimal target, decimal scorePotential)
+        private Func<int, bool> TargetAxium(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, v) * 90m / 50m;
+            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 90m / 50m;
         }
 
-        private Func<int, bool> TargetFracture(decimal target, decimal scorePotential)
+        private Func<int, bool> TargetFracture(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, v) * 99m / 50m;
+            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 99m / 50m;
         }
 
         private void SetValue(int column, int row, int? score)
         {
             if (score is int point)
             {
-                if (point < 900_0000)
-                {
-                    this.dataGridView1[column, row].Style.BackColor = Color.GreenYellow;
-                }
-                else if (point < 950_0000)
-                {
-                    this.dataGridView1[column, row].Style.BackColor = Color.Aqua;
-                }
-                else if (point < 980_0000)
-                {
-                    this.dataGridView1[column, row].Style.BackColor = Color.Blue;
-                    this.dataGridView1[column, row].Style.ForeColor = Color.White;
-                }
-                else if (point < 995_0000)
-                {
-                    this.dataGridView1[column, row].Style.BackColor = Color.Yellow;
-                }
-                else
-                {
-                    this.dataGridView1[column, row].Style.BackColor = Color.OrangeRed;
-                }
+                SetPointColor(this.dataGridView1, column, row, point);
                 this.dataGridView1[column, row].Value = point;
             }
             else
             {
-                this.dataGridView1[column, row].Style.BackColor = Color.Red;
+                this.dataGridView1[column, row].Style.BackColor = Color.Black;
                 this.dataGridView1[column, row].Style.ForeColor = Color.White;
                 this.dataGridView1[column, row].Value = "不可能";
             }

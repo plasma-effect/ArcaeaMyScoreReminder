@@ -82,6 +82,11 @@ namespace ScoreManager
                     RoundDown(step * 90m / 50m, 1),
                     RoundDown(step * 99m / 50m, 1));
             }
+            foreach (var (data, row) in this.paints.Indexed())
+            {
+                SetDifficultyColor(this.dataGridView1, 2, row, data.Difficulty);
+                SetPointColor(this.dataGridView1, 5, row, data.Score);
+            }
         }
 
         private void PaintReset()

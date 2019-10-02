@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing;
 using static System.Linq.Enumerable;
 
 namespace ScoreManager
@@ -185,6 +187,47 @@ namespace ScoreManager
             foreach(var v in ts)
             {
                 yield return (v, ++index);
+            }
+        }
+
+        static public void SetPointColor(DataGridView view, int column, int row, int point)
+        {
+            if (point < 900_0000)
+            {
+                view[column, row].Style.BackColor = Color.GreenYellow;
+            }
+            else if (point < 950_0000)
+            {
+                view[column, row].Style.BackColor = Color.Aqua;
+            }
+            else if (point < 980_0000)
+            {
+                view[column, row].Style.BackColor = Color.Blue;
+                view[column, row].Style.ForeColor = Color.White;
+            }
+            else if (point < 995_0000)
+            {
+                view[column, row].Style.BackColor = Color.Yellow;
+            }
+            else
+            {
+                view[column, row].Style.BackColor = Color.OrangeRed;
+            }
+        }
+
+        static public void SetDifficultyColor(DataGridView view, int column, int row, int difficulty)
+        {
+            switch (difficulty)
+            {
+                case 0:
+                    view[column, row].Style.BackColor = Color.Aqua;
+                    break;
+                case 1:
+                    view[column, row].Style.BackColor = Color.Lime;
+                    break;
+                case 2:
+                    view[column, row].Style.BackColor = Color.Fuchsia;
+                    break;
             }
         }
     }
