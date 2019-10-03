@@ -230,5 +230,24 @@ namespace ScoreManager
                     break;
             }
         }
+
+        static public int FarCount(int score, int notes)
+        {
+            var min = 0;
+            var max = notes + 1;
+            while (max - min > 1)
+            {
+                var mid = (min + max) / 2;
+                if (1000_0000L * mid / notes < score)
+                {
+                    min = mid;
+                }
+                else
+                {
+                    max = mid;
+                }
+            }
+            return min;
+        }
     }
 }

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.songDataGrid = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.SongName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PastLevel = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PastPotential = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,6 +39,7 @@
             this.FutureLevel = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FuturePotential = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FutureNotes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.songDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,18 +66,6 @@
             this.songDataGrid.RowTemplate.Height = 33;
             this.songDataGrid.Size = new System.Drawing.Size(1750, 639);
             this.songDataGrid.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(1562, 657);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 60);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "完了";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ButtonClick);
             // 
             // SongName
             // 
@@ -159,6 +147,18 @@
             this.FutureNotes.Name = "FutureNotes";
             this.FutureNotes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button1.Location = new System.Drawing.Point(1562, 657);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(200, 60);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "完了";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.ButtonClick);
+            // 
             // DataManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
@@ -167,7 +167,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.songDataGrid);
             this.Name = "DataManagerForm";
-            this.Text = "DataManager";
+            this.Text = "Song Data Manager";
             ((System.ComponentModel.ISupportInitialize)(this.songDataGrid)).EndInit();
             this.ResumeLayout(false);
 

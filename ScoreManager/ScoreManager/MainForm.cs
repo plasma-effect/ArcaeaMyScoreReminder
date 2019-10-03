@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 using System.IO;
 using static ScoreManager.Utility;
 using static System.Linq.Enumerable;
@@ -44,8 +46,8 @@ namespace ScoreManager
 
         Filter filter;
         ScoreManager manager;
-        IEnumerable<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> paints;
-        List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> list;
+        IEnumerable<ScoreData> paints;
+        List<ScoreData> list;
 
         private void DataManagerClick(object sender, EventArgs e)
         {
@@ -91,31 +93,27 @@ namespace ScoreManager
 
         private void PaintReset()
         {
-            this.list = new List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)>();
+            this.list = new List<ScoreData>();
             foreach (var name in this.manager)
             {
                 var unit = this.manager[name];
                 foreach (var i in Range(0, 3))
                 {
-                    this.list.Add((name, i, unit.Levels[i], unit.Potentials[i], unit.Bests[i], 0, GetPotential(unit.Potentials[i], unit.Bests[i])));
+                    this.list.Add(new ScoreData(name, i, unit.Levels[i], unit.Potentials[i], unit.Bests[i], unit.Notes[i]));
                 }
             }
-            this.list.Sort((a, b) =>
-            {
-                return a.CalcPotential.CompareTo(b.CalcPotential);
-            });
+            this.list.Sort();
             this.list.Reverse();
             foreach (var i in Range(0, this.list.Count))
             {
-                var p = this.list[i];
-                this.list[i] = (p.Name, p.Difficulty, p.Level, p.Potential, p.Score, i + 1, p.CalcPotential);
+                this.list[i] = new ScoreData(this.list[i], i + 1);
             }
             this.paints = this.list;
             SetFilter(this.filter);
             ParsonalPotentialCalc(this.list);
         }
 
-        private void ParsonalPotentialCalc(List<(string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential)> list)
+        private void ParsonalPotentialCalc(List<ScoreData> list)
         {
             var sum = 0.0m;
             const int best = 30;
@@ -124,7 +122,7 @@ namespace ScoreManager
                 sum += GetPotential(list[i].Potential, list[i].Score);
             }
             var min = RoundDown(sum / (best + 10), 2);
-            var max = RoundDown((sum + 10 * GetPotential(list[0].Potential, list[0].Score)) / (best + 10), 2);
+            var max = this.list.Count == 0 ? min : RoundDown((sum + 10 * GetPotential(list[0].Potential, list[0].Score)) / (best + 10), 2);
             this.Text = $"Arcaea Score Manager [Min Potential: {min}, Max Potential: {max}]";
         }
 
@@ -236,7 +234,7 @@ namespace ScoreManager
                     PaintReset();
                     PaintScoreData();
                     var now = this.list.Find(d => d.Name == this.addDataSong.Text && d.Difficulty == difficulty);
-                    StatusTextSet($@"""{this.addDataSong.Text}""の自己ベストを更新しました：[Score: {prev.Score}, Potential: {prev.CalcPotential}, Rank: {prev.Rank}]→[Score: {now.Score}, Potential: {now.CalcPotential}, Rank: {now.Rank}]");
+                    StatusTextSet($@"""{this.addDataSong.Text}({this.addDataDifficulty.Text})""の自己ベストを更新しました：[Score: {prev.Score}, Potential: {RoundDown(prev.CalcPotential)}, Rank: {prev.Rank}]→[Score: {now.Score}, Potential: {RoundDown(now.CalcPotential)}, Rank: {now.Rank}]");
                 }
                 this.addDataSong.Text = "";
                 this.addDataDifficulty.SelectedIndex = -1;
@@ -286,7 +284,7 @@ namespace ScoreManager
         public void SetFilter(Filter filter)
         {
             this.filter = filter;
-            bool Check((string Name, int Difficulty, int Level, decimal Potential, int Score, int Rank, decimal CalcPotential) data)
+            bool Check(ScoreData data)
             {
                 if (!filter.LevelFilters[data.Level])
                 {
@@ -392,6 +390,103 @@ namespace ScoreManager
         public void StatusTextSet(string str)
         {
             this.statusText.Text = str;
+        }
+
+        private void ShowRecommend(object sender, EventArgs e)
+        {
+            using (var form = new RecommendForm(this.list))
+            {
+                form.ShowDialog();
+            }
+        }
+
+        private void ExportScoreData(object sender, EventArgs e)
+        {
+            using(var sfd = new SaveFileDialog()
+            {
+                Filter = "JSONファイル(*.json)|*.json|すべてのファイル(*.*)|*.+"
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    var list = new List<SongData>();
+                    foreach (var name in this.manager)
+                    {
+                        var unit = this.manager[name];
+                        list.Add(new SongData(name, unit.Levels, unit.Potentials, unit.Notes));
+                    }
+                    var serializer = new DataContractJsonSerializer(typeof(List<SongData>));
+                    using(var stream = new FileStream(sfd.FileName, FileMode.OpenOrCreate))
+                    {
+                        serializer.WriteObject(stream, list);
+                    }
+                }
+            }
+        }
+
+        private void ImportScoreData(object sender, EventArgs e)
+        {
+            using(var ofd = new OpenFileDialog()
+            {
+                Filter = "JSONファイル(*.json)|*.json|すべてのファイル(*.*)|*.+"
+            })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var deserializer = new DataContractJsonSerializer(typeof(List<SongData>));
+                        using (var stream = new FileStream(ofd.FileName, FileMode.Open))
+                        {
+                            if(deserializer.ReadObject(stream) is List<SongData> list)
+                            {
+                                foreach(var data in list)
+                                {
+                                    if (!this.manager.ContainsKey(data.Name))
+                                    {
+                                        this.manager.Add(data.Name,
+                                            data.Levels[0], data.Potentials[0], data.Notes[0],
+                                            data.Levels[1], data.Potentials[1], data.Notes[1],
+                                            data.Levels[2], data.Potentials[2], data.Notes[2]);
+                                    }
+                                }
+                                PaintReset();
+                                PaintScoreData();
+                                SaveData();
+                            }
+                            else
+                            {
+                                throw new InvalidDataException("適切なJSONファイルではありません");
+                            }
+                        }
+                    }
+                    catch(Exception exp)
+                    {
+                        MessageBox.Show(exp.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+    }
+
+    [DataContract]
+    struct SongData
+    {
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public int[] Levels { get; set; }
+        [DataMember]
+        public decimal[] Potentials { get; set; }
+        [DataMember]
+        public int[] Notes { get; set; }
+
+        public SongData(string name, int[] levels, decimal[] potentials, int[] notes)
+        {
+            this.Name = name;
+            this.Levels = levels;
+            this.Potentials = potentials;
+            this.Notes = notes;
         }
     }
 }

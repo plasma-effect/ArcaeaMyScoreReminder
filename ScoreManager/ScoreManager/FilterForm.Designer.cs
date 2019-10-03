@@ -352,7 +352,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.levelFilter0);
             this.Name = "FilterForm";
-            this.Text = "FilterForm";
+            this.Text = "Filter Manager";
             this.ResumeLayout(false);
             this.PerformLayout();
 
