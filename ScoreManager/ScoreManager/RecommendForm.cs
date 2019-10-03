@@ -68,7 +68,7 @@ namespace ScoreManager
                 this.dataGridView1.Rows.Add(
                     this.list[index].Name,
                     DifficultyToString(this.list[index].Difficulty),
-                    this.list[index].Level,
+                    LevelToString(this.list[index].Level),
                     potential,
                     GetScore(far, index),
                     2 * this.list[index].Notes - far);
