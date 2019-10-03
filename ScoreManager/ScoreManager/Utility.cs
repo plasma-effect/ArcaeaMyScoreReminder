@@ -234,11 +234,11 @@ namespace ScoreManager
         static public int FarCount(int score, int notes)
         {
             var min = 0;
-            var max = notes + 1;
+            var max = 2 * notes + 1;
             while (max - min > 1)
             {
                 var mid = (min + max) / 2;
-                if (1000_0000L * mid / notes < score)
+                if (1000_0000L * mid / (2 * notes) < score)
                 {
                     min = mid;
                 }

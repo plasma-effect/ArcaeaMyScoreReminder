@@ -24,9 +24,9 @@ namespace ScoreManager
                 var futurePotential = GetPotential(unit.Potentials[2], unit.Bests[2]);
                 var maxindex = MaxElemental(pastPotential, presentPotential, futurePotential);
                 this.dataGridView1.Rows.Add(name,
-                    unit.Bests[0], pastPotential, unit.Notes[0] - FarCount(unit.Bests[0], unit.Notes[0]),
-                    unit.Bests[1], presentPotential, unit.Notes[1] - FarCount(unit.Bests[1], unit.Notes[1]),
-                    unit.Bests[2], futurePotential, unit.Notes[2] - FarCount(unit.Bests[2], unit.Notes[2]));
+                    unit.Bests[0], pastPotential, 2 * unit.Notes[0] - FarCount(unit.Bests[0], unit.Notes[0]),
+                    unit.Bests[1], presentPotential, 2 * unit.Notes[1] - FarCount(unit.Bests[1], unit.Notes[1]),
+                    unit.Bests[2], futurePotential, 2 * unit.Notes[2] - FarCount(unit.Bests[2], unit.Notes[2]));
                 this.dataGridView1[2 + 3 * maxindex, index].Style.BackColor = Color.Yellow;
                 SetPointColor(this.dataGridView1, 1, index, unit.Bests[0]);
                 SetPointColor(this.dataGridView1, 4, index, unit.Bests[1]);

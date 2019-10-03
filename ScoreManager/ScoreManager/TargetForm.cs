@@ -39,13 +39,13 @@ namespace ScoreManager
                 {
                     if (this.manager[name] is ScoreManager.Unit unit)
                     {
-                        var past = PartitionPoint(0, unit.Notes[0], action(target, unit.Potentials[0], unit.Notes[0]));
-                        var present = PartitionPoint(0, unit.Notes[1], action(target, unit.Potentials[1], unit.Notes[1]));
-                        var future = PartitionPoint(0, unit.Notes[2], action(target, unit.Potentials[2], unit.Notes[2]));
+                        var past = PartitionPoint(0, 2 * unit.Notes[0], action(target, unit.Potentials[0], unit.Notes[0]));
+                        var present = PartitionPoint(0, 2 * unit.Notes[1], action(target, unit.Potentials[1], unit.Notes[1]));
+                        var future = PartitionPoint(0, 2 * unit.Notes[2], action(target, unit.Potentials[2], unit.Notes[2]));
                         this.dataGridView1.Rows.Add(name,
-                            GetScore(past, unit.Notes[0])?.ToString() ?? "不可能", (unit.Notes[0] - past)?.ToString() ?? "",
-                            GetScore(present, unit.Notes[1])?.ToString() ?? "不可能", (unit.Notes[1] - present)?.ToString() ?? "",
-                            GetScore(future, unit.Notes[2])?.ToString() ?? "不可能", (unit.Notes[2] - future)?.ToString() ?? "");
+                            GetScore(past, unit.Notes[0])?.ToString() ?? "不可能", (2 * unit.Notes[0] - past)?.ToString() ?? "",
+                            GetScore(present, unit.Notes[1])?.ToString() ?? "不可能", (2 * unit.Notes[1] - present)?.ToString() ?? "",
+                            GetScore(future, unit.Notes[2])?.ToString() ?? "不可能", (2 * unit.Notes[2] - future)?.ToString() ?? "");
                         SetColor(1, index, GetScore(past, unit.Notes[0]));
                         SetColor(3, index, GetScore(present, unit.Notes[1]));
                         SetColor(5, index, GetScore(future, unit.Notes[2]));
@@ -58,34 +58,39 @@ namespace ScoreManager
             }
         }
 
-        private int? GetScore(int? pure, int notes)
+        private int? GetScore(int? far, int notes)
         {
-            return (int?)(1000_0000L * pure / notes);
+            return (int?)(1000_0000L * far / (2 * notes));
+        }
+
+        private int GetScore(int far,int notes)
+        {
+            return (int)(1000_0000L * far / (2 * notes));
         }
 
         private Func<int, bool> TargetPotential(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetPotential(scorePotential, (int)(1000_0000L * v / notes));
+            return v => target <= GetPotential(scorePotential, GetScore(v, notes));
         }
 
         private Func<int, bool> TargetBaseStep(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes));
+            return v => target <= GetStep(scorePotential, GetScore(v, notes));
         }
 
         private Func<int, bool> TargetGrievousLady(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 102m / 50m;
+            return v => target <= GetStep(scorePotential, GetScore(v, notes)) * 102m / 50m;
         }
 
         private Func<int, bool> TargetAxium(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 90m / 50m;
+            return v => target <= GetStep(scorePotential, GetScore(v, notes)) * 90m / 50m;
         }
 
         private Func<int, bool> TargetFracture(decimal target, decimal scorePotential, int notes)
         {
-            return v => target <= GetStep(scorePotential, (int)(1000_0000L * v / notes)) * 99m / 50m;
+            return v => target <= GetStep(scorePotential, GetScore(v, notes)) * 99m / 50m;
         }
 
         private void SetColor(int column, int row, int? score)

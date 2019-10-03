@@ -52,7 +52,7 @@ namespace ScoreManager
                 {
                     continue;
                 }
-                var min = PartitionPoint(0, this.list[i].Notes,
+                var min = PartitionPoint(0, 2 * this.list[i].Notes,
                     v => targetPotential <= GetPotential(this.list[i].Potential, GetScore(v, i)));
                 var score = GetScore(min.Value, i);
                 if (restrict <= score)
@@ -63,23 +63,23 @@ namespace ScoreManager
             }
             list.Sort();
             this.dataGridView1.Rows.Clear();
-            foreach (var ((potential, pure, index), row) in list.Indexed())
+            foreach (var ((potential, far, index), row) in list.Indexed())
             {
                 this.dataGridView1.Rows.Add(
                     this.list[index].Name,
                     DifficultyToString(this.list[index].Difficulty),
                     this.list[index].Level,
                     potential,
-                    GetScore(pure, index),
-                    this.list[index].Notes - pure);
+                    GetScore(far, index),
+                    2 * this.list[index].Notes - far);
                 SetDifficultyColor(this.dataGridView1, 1, row, this.list[index].Difficulty);
-                SetPointColor(this.dataGridView1, 4, row, GetScore(pure, index));
+                SetPointColor(this.dataGridView1, 4, row, GetScore(far, index));
             }
         }
 
-        private int GetScore(int pure,int index)
+        private int GetScore(int far,int index)
         {
-            return (int)(1000_0000L * pure / this.list[index].Notes);
+            return (int)(1000_0000L * far / (2 * this.list[index].Notes));
         }
     }
 }
