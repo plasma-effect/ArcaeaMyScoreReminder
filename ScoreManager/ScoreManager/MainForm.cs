@@ -18,36 +18,74 @@ namespace ScoreManager
 {
     public partial class MainForm : Form
     {
-        const string saveAddress = "arcaeadata.dat";
-        
+        const string masterSaveAddress = "arcaeadata.dat";
+        const string logSaveAddress = "arcaealog.dat";
+
         public MainForm()
         {
             InitializeComponent();
             this.filter = new Filter();
-            if (File.Exists(saveAddress))
+            LoadLogData();
+            LoadMasterData();
+            PaintReset();
+            PaintScoreData();
+        }
+
+        private void LoadLogData()
+        {
+            if (File.Exists(logSaveAddress))
             {
-                using (var stream = new FileStream(saveAddress, FileMode.Open))
+                using (var stream = new FileStream(logSaveAddress, FileMode.Open))
+                {
+                    var formatter = new BinaryFormatter();
+                    this.scoreLog = formatter.Deserialize(stream) as List<ScoreChangeLog>;
+                }
+            }
+            if (this.scoreLog is null)
+            {
+                this.scoreLog = new List<ScoreChangeLog>();
+            }
+        }
+
+        private void LoadMasterData()
+        {
+            if (File.Exists(masterSaveAddress))
+            {
+                using (var stream = new FileStream(masterSaveAddress, FileMode.Open))
                 {
                     var formatter = new BinaryFormatter();
                     this.manager = formatter.Deserialize(stream) as ScoreManager;
                 }
+                if (this.manager is ScoreManager manager &&
+                    this.scoreLog.Count != 0 &&
+                    File.GetLastWriteTime(masterSaveAddress) < this.scoreLog.Last().TimeStamp)
+                {
+                    var last = File.GetLastWriteTime(masterSaveAddress);
+                    foreach(var data in this.scoreLog)
+                    {
+                        if (last < data.TimeStamp)
+                        {
+                            manager[data.SongName].Bests[data.Difficulty] = data.Current;
+                        }
+                    }
+                    SaveMasterData();
+                }
             }
-            if(this.manager is null)
+            if (this.manager is null)
             {
                 this.manager = new ScoreManager();
             }
-            foreach(var name in this.manager)
+            foreach (var name in this.manager)
             {
                 this.addDataSong.Items.Add(name);
             }
-            PaintReset();
-            PaintScoreData();
         }
 
         Filter filter;
         ScoreManager manager;
         IEnumerable<ScoreData> paints;
         List<ScoreData> list;
+        List<ScoreChangeLog> scoreLog;
 
         private void DataManagerClick(object sender, EventArgs e)
         {
@@ -126,9 +164,9 @@ namespace ScoreManager
             this.Text = $"Arcaea Score Manager [Min Potential: {min}, Max Potential: {max}]";
         }
 
-        private void SaveData()
+        private void SaveMasterData()
         {
-            using (var stream = new FileStream(saveAddress, FileMode.OpenOrCreate))
+            using (var stream = new FileStream(masterSaveAddress, FileMode.OpenOrCreate))
             {
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this.manager);
@@ -149,7 +187,7 @@ namespace ScoreManager
             {
                 var builder = new StringBuilder();
                 builder.AppendLine("楽曲の削除には対応していません");
-                foreach(var name in must)
+                foreach (var name in must)
                 {
                     builder.AppendLine(name);
                 }
@@ -157,45 +195,36 @@ namespace ScoreManager
             }
             foreach (var index in Range(0, view.Rows.Count - 1))
             {
-                var name = view[0, index].Value.ToString();
-                if (name == "")
+                SingleScoreDataSet(view, index);
+            }
+            SaveMasterData();
+            ResetScoreLog();
+        }
+
+        private void ResetScoreLog()
+        {
+            this.scoreLog.Clear();
+            SaveLogData();
+        }
+
+        private void SingleScoreDataSet(DataGridView view, int index)
+        {
+            var name = view[0, index].Value.ToString();
+            if (name == "")
+            {
+                throw new ArgumentException($"{index + 1} 行目: 曲名を入力してください");
+            }
+            if (this.manager[name] is ScoreManager.Unit unit)
+            {
+                foreach (var i in Range(0, 3))
                 {
-                    throw new ArgumentException($"{index + 1} 行目: 曲名を入力してください");
-                }
-                if (this.manager[name] is ScoreManager.Unit unit)
-                {
-                    foreach (var i in Range(0, 3))
+                    if (StringToLevel(view[3 * i + 1, index].Value.ToString()) is int level &&
+                        decimal.TryParse(view[3 * i + 2, index].Value.ToString(), out var potential) &&
+                        int.TryParse(view[3 * i + 3, index].Value.ToString(), out var notes))
                     {
-                        if (StringToLevel(view[3 * i + 1, index].Value.ToString()) is int level &&
-                            decimal.TryParse(view[3 * i + 2, index].Value.ToString(), out var potential) &&
-                            int.TryParse(view[3 * i + 3, index].Value.ToString(), out var notes))
-                        {
-                            this.manager[name].Notes[i] = notes;
-                            this.manager[name].Potentials[i] = potential;
-                            this.manager[name].Notes[i] = notes;
-                        }
-                        else
-                        {
-                            throw new ArgumentException($"{index + 1} 行目({name}): 正しい形式ではありません");
-                        }
-                    }
-                }
-                else
-                {
-                    if (StringToLevel(view[1, index].Value.ToString()) is int pstLevel &&
-                        StringToLevel(view[4, index].Value.ToString()) is int prsLevel &&
-                        StringToLevel(view[7, index].Value.ToString()) is int ftrLevel &&
-                        decimal.TryParse(view[2, index].Value.ToString(), out var pstPotential) &&
-                        decimal.TryParse(view[5, index].Value.ToString(), out var prsPotential) &&
-                        decimal.TryParse(view[8, index].Value.ToString(), out var ftrPotential) &&
-                        int.TryParse(view[3, index].Value.ToString(), out var pstNotes) &&
-                        int.TryParse(view[6, index].Value.ToString(), out var prsNotes) &&
-                        int.TryParse(view[9, index].Value.ToString(), out var ftrNotes))
-                    {
-                        this.manager.Add(name,
-                            pstLevel, pstPotential, pstNotes,
-                            prsLevel, prsPotential, prsNotes,
-                            ftrLevel, ftrPotential, ftrNotes);
+                        this.manager[name].Notes[i] = notes;
+                        this.manager[name].Potentials[i] = potential;
+                        this.manager[name].Notes[i] = notes;
                     }
                     else
                     {
@@ -203,7 +232,28 @@ namespace ScoreManager
                     }
                 }
             }
-            SaveData();
+            else
+            {
+                if (StringToLevel(view[1, index].Value.ToString()) is int pstLevel &&
+                    StringToLevel(view[4, index].Value.ToString()) is int prsLevel &&
+                    StringToLevel(view[7, index].Value.ToString()) is int ftrLevel &&
+                    decimal.TryParse(view[2, index].Value.ToString(), out var pstPotential) &&
+                    decimal.TryParse(view[5, index].Value.ToString(), out var prsPotential) &&
+                    decimal.TryParse(view[8, index].Value.ToString(), out var ftrPotential) &&
+                    int.TryParse(view[3, index].Value.ToString(), out var pstNotes) &&
+                    int.TryParse(view[6, index].Value.ToString(), out var prsNotes) &&
+                    int.TryParse(view[9, index].Value.ToString(), out var ftrNotes))
+                {
+                    this.manager.Add(name,
+                        pstLevel, pstPotential, pstNotes,
+                        prsLevel, prsPotential, prsNotes,
+                        ftrLevel, ftrPotential, ftrNotes);
+                }
+                else
+                {
+                    throw new ArgumentException($"{index + 1} 行目({name}): 正しい形式ではありません");
+                }
+            }
         }
 
         private void AddScore(object sender, KeyPressEventArgs e)
@@ -215,6 +265,7 @@ namespace ScoreManager
                     MessageBox.Show("正しい曲名を選択してください", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                var name = this.addDataSong.Text;
                 var difficulty = StringToDifficulty(this.addDataDifficulty.Text);
                 if(difficulty is null)
                 {
@@ -228,17 +279,55 @@ namespace ScoreManager
                 var best = this.manager[this.addDataSong.Text].Bests[difficulty.Value];
                 if (best < score)
                 {
-                    var prev = this.list.Find(d => d.Name == this.addDataSong.Text && d.Difficulty == difficulty);
-                    this.manager[this.addDataSong.Text].Bests[difficulty.Value] = score;
-                    SaveData();
-                    PaintReset();
-                    PaintScoreData();
-                    var now = this.list.Find(d => d.Name == this.addDataSong.Text && d.Difficulty == difficulty);
-                    StatusTextSet($@"""{this.addDataSong.Text}({this.addDataDifficulty.Text})""の自己ベストを更新しました：[Score: {prev.Score}, Potential: {RoundDown(prev.CalcPotential)}, Rank: {prev.Rank}]→[Score: {now.Score}, Potential: {RoundDown(now.CalcPotential)}, Rank: {now.Rank}]");
+                    CommitLog(name, difficulty.Value, best, score);
+                    ChangeSingleScore(name, difficulty.Value, score);
                 }
                 this.addDataSong.Text = "";
                 this.addDataDifficulty.SelectedIndex = -1;
                 this.addDataScore.Text = "";
+            }
+        }
+
+        private void ChangeSingleScore(string name, int difficulty, int score)
+        {
+            var prev = this.list.Find(d => d.Name == name && d.Difficulty == difficulty);
+            this.manager[name].Bests[difficulty] = score;
+            PaintReset();
+            PaintScoreData();
+            var now = this.list.Find(d => d.Name == name && d.Difficulty == difficulty);
+            if (prev.Score < now.Score)
+            {
+                StatusTextSet($@"""{this.addDataSong.Text}({this.addDataDifficulty.Text})""の自己ベストを更新しました：[Score: {prev.Score}, Potential: {RoundDown(prev.CalcPotential)}, Rank: {prev.Rank}]→[Score: {now.Score}, Potential: {RoundDown(now.CalcPotential)}, Rank: {now.Rank}]");
+            }
+        }
+
+        private void CommitLog(string name, int difficulty, int prev, int score)
+        {
+            this.scoreLog.Add(new ScoreChangeLog(name, difficulty, prev, score, DateTime.Now));
+            SaveLogData();
+        }
+
+        public void Rollback(int count)
+        {
+            var index = this.scoreLog.Count;
+            foreach (var i in Range(0, count))
+            {
+                --index;
+                ChangeSingleScore(
+                    this.scoreLog[index].SongName,
+                    this.scoreLog[index].Difficulty,
+                    this.scoreLog[index].Previous);
+            }
+            this.scoreLog.RemoveRange(this.scoreLog.Count - count, count);
+            SaveLogData();
+        }
+
+        private void SaveLogData()
+        {
+            using (var stream = new FileStream(logSaveAddress, FileMode.OpenOrCreate))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this.scoreLog);
             }
         }
 
@@ -266,7 +355,8 @@ namespace ScoreManager
                 }
             }
             StatusTextSet("スコア記録を変更しました");
-            SaveData();
+            SaveMasterData();
+            ResetScoreLog();
         }
 
         private void FilterClick(object sender, EventArgs e)
@@ -452,7 +542,7 @@ namespace ScoreManager
                                 }
                                 PaintReset();
                                 PaintScoreData();
-                                SaveData();
+                                SaveMasterData();
                             }
                             else
                             {
@@ -465,6 +555,19 @@ namespace ScoreManager
                         MessageBox.Show(exp.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+        }
+
+        private void MainFormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveMasterData();
+        }
+
+        private void RollBackClick(object sender, EventArgs e)
+        {
+            using(var form = new RollBackForm(this.scoreLog, this))
+            {
+                form.ShowDialog();
             }
         }
     }

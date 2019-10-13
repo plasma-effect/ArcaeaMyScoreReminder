@@ -72,6 +72,7 @@
     <Compile Include="FilterForm.Designer.cs">
       <DependentUpon>FilterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="HelpClasses\ScoreChangeLog.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,7 +87,13 @@
     <Compile Include="RecommendForm.Designer.cs">
       <DependentUpon>RecommendForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScoreManager.cs" />
+    <Compile Include="HelpClasses\ScoreManager.cs" />
+    <Compile Include="RollBackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RollBackForm.Designer.cs">
+      <DependentUpon>RollBackForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatisticsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,7 +106,7 @@
     <Compile Include="TargetForm.Designer.cs">
       <DependentUpon>TargetForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility.cs" />
+    <Compile Include="HelpClasses\Utility.cs" />
     <EmbeddedResource Include="DataManagerForm.resx">
       <DependentUpon>DataManagerForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,6 +130,9 @@
     </Compile>
     <EmbeddedResource Include="RecommendForm.resx">
       <DependentUpon>RecommendForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RollBackForm.resx">
+      <DependentUpon>RollBackForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatisticsForm.resx">
       <DependentUpon>StatisticsForm.cs</DependentUpon>
