@@ -17,10 +17,11 @@ namespace ScoreManager
         public RecommendForm(List<ScoreData> list)
         {
             InitializeComponent();
-            this.restrict.SelectedIndex = 0;
+            this.scoreRestrict.SelectedIndex = 0;
+            this.rankRestrict.SelectedIndex = 29;
             this.list = list;
             this.restrictScore = new int[] { 980_0000, 995_0000, 1000_0000, 9999_9999 };
-            this.Text = $"Recommend [Target Potential:{RoundDown(list[Math.Min(this.list.Count - 1, 29)].CalcPotential)}]";
+            
             SetRecommend();
         }
 
@@ -34,14 +35,39 @@ namespace ScoreManager
 
         private void SetRecommend()
         {
-            if (this.restrict.SelectedIndex < 0 || 4 <= this.restrict.SelectedIndex)
+            if (this.scoreRestrict.SelectedIndex < 0 || 4 <= this.scoreRestrict.SelectedIndex)
             {
                 MessageBox.Show("制限の設定が異常です", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var targetPotential = this.list[Math.Min(this.list.Count - 1, 29)].CalcPotential;
-            var restrict = this.restrictScore[this.restrict.SelectedIndex];
+            var targetPotential = this.list[Math.Min(this.list.Count - 1, this.rankRestrict.SelectedIndex)].CalcPotential;
+            var restrict = this.restrictScore[this.scoreRestrict.SelectedIndex];
             var list = new List<(decimal Potential, int TargetCount, int Index)>();
+            RecommendCheck(targetPotential, restrict, list);
+            list.Sort();
+            ViewRecommendData(list);
+            this.Text = $"Recommend [Target Potential:{RoundDown(targetPotential)}]";
+        }
+
+        private void ViewRecommendData(List<(decimal Potential, int TargetCount, int Index)> list)
+        {
+            this.dataGridView1.Rows.Clear();
+            foreach (var ((potential, far, index), row) in list.Indexed())
+            {
+                this.dataGridView1.Rows.Add(
+                    this.list[index].Name,
+                    DifficultyToString(this.list[index].Difficulty),
+                    LevelToString(this.list[index].Level),
+                    potential,
+                    GetScore(far, index),
+                    2 * this.list[index].Notes - far);
+                SetDifficultyColor(this.dataGridView1, 1, row, this.list[index].Difficulty);
+                SetPointColor(this.dataGridView1, 4, row, GetScore(far, index));
+            }
+        }
+
+        private void RecommendCheck(decimal targetPotential, int restrict, List<(decimal Potential, int TargetCount, int Index)> list)
+        {
             foreach (var i in Range(0, this.list.Count))
             {
                 if (targetPotential <= this.list[i].CalcPotential)
@@ -60,20 +86,6 @@ namespace ScoreManager
                     continue;
                 }
                 list.Add((this.list[i].Potential, min.Value, i));
-            }
-            list.Sort();
-            this.dataGridView1.Rows.Clear();
-            foreach (var ((potential, far, index), row) in list.Indexed())
-            {
-                this.dataGridView1.Rows.Add(
-                    this.list[index].Name,
-                    DifficultyToString(this.list[index].Difficulty),
-                    LevelToString(this.list[index].Level),
-                    potential,
-                    GetScore(far, index),
-                    2 * this.list[index].Notes - far);
-                SetDifficultyColor(this.dataGridView1, 1, row, this.list[index].Difficulty);
-                SetPointColor(this.dataGridView1, 4, row, GetScore(far, index));
             }
         }
 

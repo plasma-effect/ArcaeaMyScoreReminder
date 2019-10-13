@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.restrict = new System.Windows.Forms.ComboBox();
+            this.scoreRestrict = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.SongName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Difficulty = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,6 +37,7 @@
             this.Potential = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TargetScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TargetCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rankRestrict = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,7 +45,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(812, 12);
+            this.button1.Location = new System.Drawing.Point(812, 55);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(150, 45);
             this.button1.TabIndex = 0;
@@ -52,20 +53,20 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.ButtonClick);
             // 
-            // restrict
+            // scoreRestrict
             // 
-            this.restrict.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.restrict.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.restrict.FormattingEnabled = true;
-            this.restrict.Items.AddRange(new object[] {
+            this.scoreRestrict.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.scoreRestrict.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.scoreRestrict.FormattingEnabled = true;
+            this.scoreRestrict.Items.AddRange(new object[] {
             "9800000未満",
             "9950000未満",
             "PURE MEMORYを除く",
             "無制限"});
-            this.restrict.Location = new System.Drawing.Point(463, 16);
-            this.restrict.Name = "restrict";
-            this.restrict.Size = new System.Drawing.Size(343, 41);
-            this.restrict.TabIndex = 1;
+            this.scoreRestrict.Location = new System.Drawing.Point(463, 59);
+            this.scoreRestrict.Name = "scoreRestrict";
+            this.scoreRestrict.Size = new System.Drawing.Size(343, 41);
+            this.scoreRestrict.TabIndex = 1;
             // 
             // dataGridView1
             // 
@@ -80,11 +81,11 @@
             this.Potential,
             this.TargetScore,
             this.TargetCount});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 63);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 106);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(950, 754);
+            this.dataGridView1.Size = new System.Drawing.Size(950, 711);
             this.dataGridView1.TabIndex = 2;
             // 
             // SongName
@@ -141,13 +142,55 @@
             this.TargetCount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.TargetCount.Width = 120;
             // 
+            // rankRestrict
+            // 
+            this.rankRestrict.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rankRestrict.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.rankRestrict.FormattingEnabled = true;
+            this.rankRestrict.Items.AddRange(new object[] {
+            "1位",
+            "2位",
+            "3位",
+            "4位",
+            "5位",
+            "6位",
+            "7位",
+            "8位",
+            "9位",
+            "10位",
+            "11位",
+            "12位",
+            "13位",
+            "14位",
+            "15位",
+            "16位",
+            "17位",
+            "18位",
+            "19位",
+            "20位",
+            "21位",
+            "22位",
+            "23位",
+            "24位",
+            "25位",
+            "26位",
+            "27位",
+            "28位",
+            "29位",
+            "30位"});
+            this.rankRestrict.Location = new System.Drawing.Point(463, 12);
+            this.rankRestrict.Name = "rankRestrict";
+            this.rankRestrict.Size = new System.Drawing.Size(343, 41);
+            this.rankRestrict.TabIndex = 3;
+            // 
             // RecommendForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(974, 829);
+            this.Controls.Add(this.rankRestrict);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.restrict);
+            this.Controls.Add(this.scoreRestrict);
             this.Controls.Add(this.button1);
             this.Name = "RecommendForm";
             this.Text = "RecommendForm";
@@ -159,7 +202,7 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox restrict;
+        private System.Windows.Forms.ComboBox scoreRestrict;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn SongName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Difficulty;
@@ -167,5 +210,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Potential;
         private System.Windows.Forms.DataGridViewTextBoxColumn TargetScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn TargetCount;
+        private System.Windows.Forms.ComboBox rankRestrict;
     }
 }
