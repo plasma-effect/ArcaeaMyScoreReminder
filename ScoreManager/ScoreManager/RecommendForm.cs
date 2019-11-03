@@ -59,10 +59,13 @@ namespace ScoreManager
                     DifficultyToString(this.list[index].Difficulty),
                     LevelToString(this.list[index].Level),
                     potential,
+                    this.list[index].Score,
                     GetScore(far, index),
+                    2 * this.list[index].Notes - FarCount(this.list[index].Score, this.list[index].Notes),
                     2 * this.list[index].Notes - far);
                 SetDifficultyColor(this.dataGridView1, 1, row, this.list[index].Difficulty);
-                SetPointColor(this.dataGridView1, 4, row, GetScore(far, index));
+                SetPointColor(this.dataGridView1, 4, row, this.list[index].Score);
+                SetPointColor(this.dataGridView1, 5, row, GetScore(far, index));
             }
         }
 
