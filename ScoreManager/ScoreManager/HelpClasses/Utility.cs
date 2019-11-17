@@ -249,5 +249,11 @@ namespace ScoreManager
             }
             return min;
         }
+
+        static public int GetLeastScore(int notes,int pure,int far)
+        {
+            var a = 10000000m / (2 * notes);
+            return (int)((2 * pure + far) * a);
+        }
     }
 }

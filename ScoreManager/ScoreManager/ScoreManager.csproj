@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClearLineForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClearLineForm.Designer.cs">
+      <DependentUpon>ClearLineForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,9 @@
       <DependentUpon>TargetForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HelpClasses\Utility.cs" />
+    <EmbeddedResource Include="ClearLineForm.resx">
+      <DependentUpon>ClearLineForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataManagerForm.resx">
       <DependentUpon>DataManagerForm.cs</DependentUpon>
     </EmbeddedResource>

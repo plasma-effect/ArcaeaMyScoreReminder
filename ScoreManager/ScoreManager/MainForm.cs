@@ -570,6 +570,14 @@ namespace ScoreManager
                 form.ShowDialog();
             }
         }
+
+        private void CheckClearLineClick(object sender, EventArgs e)
+        {
+            using(var form = new ClearLineForm(this.manager))
+            {
+                form.ShowDialog();
+            }
+        }
     }
 
     [DataContract]
