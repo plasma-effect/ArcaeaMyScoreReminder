@@ -70,7 +70,7 @@ namespace ScoreManager
                 var a = (
                     notes < 400 ? 0.2m * notes + 80 :
                     notes < 550 ? 0.2m * notes + 30 :
-                    notes < 1400 ? 0.075m * notes + 100 : 0.8m - 900) / notes;
+                    notes < 1400 ? 0.075m * notes + 100 : 0.8m * notes - 900) / notes;
                 Func<int,bool> NormalGauge(int far)
                 {
                     return (i) => (notes - far - i) * a + 0.5m * a - 2m * i < 70m;

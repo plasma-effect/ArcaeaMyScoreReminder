@@ -119,7 +119,7 @@ namespace ScoreManager
                     RoundDown(potential),
                     RoundDown(step),
                     RoundDown(step * 102m / 50m, 1),
-                    RoundDown(step * 90m / 50m, 1),
+                    RoundDown(step * 93m / 50m, 1),
                     RoundDown(step * 99m / 50m, 1));
             }
             foreach (var (data, row) in this.paints.Indexed())

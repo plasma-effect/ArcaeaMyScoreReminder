@@ -29,17 +29,6 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Rank = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Song = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Difficulty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Potential = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Best = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BestPotential = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BestStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StepGL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StepAxium = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StepFracture = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.addDataSong = new System.Windows.Forms.ComboBox();
             this.addDataScore = new System.Windows.Forms.TextBox();
@@ -55,6 +44,17 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.Rank = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Song = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Difficulty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Potential = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Best = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BestPotential = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BestStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StepGL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StepPengin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StepFracture = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -75,7 +75,7 @@
             this.BestPotential,
             this.BestStep,
             this.StepGL,
-            this.StepAxium,
+            this.StepPengin,
             this.StepFracture});
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
@@ -83,116 +83,6 @@
             this.dataGridView1.RowTemplate.Height = 33;
             this.dataGridView1.Size = new System.Drawing.Size(1750, 661);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // Rank
-            // 
-            this.Rank.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Rank.HeaderText = "順位";
-            this.Rank.MinimumWidth = 10;
-            this.Rank.Name = "Rank";
-            this.Rank.ReadOnly = true;
-            this.Rank.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Rank.Width = 58;
-            // 
-            // Song
-            // 
-            this.Song.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Song.HeaderText = "曲名";
-            this.Song.MinimumWidth = 10;
-            this.Song.Name = "Song";
-            this.Song.ReadOnly = true;
-            this.Song.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Song.Width = 58;
-            // 
-            // Difficulty
-            // 
-            this.Difficulty.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Difficulty.HeaderText = "難易度";
-            this.Difficulty.MinimumWidth = 10;
-            this.Difficulty.Name = "Difficulty";
-            this.Difficulty.ReadOnly = true;
-            this.Difficulty.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Difficulty.Width = 79;
-            // 
-            // Level
-            // 
-            this.Level.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Level.HeaderText = "レベル";
-            this.Level.MinimumWidth = 10;
-            this.Level.Name = "Level";
-            this.Level.ReadOnly = true;
-            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Level.Width = 67;
-            // 
-            // Potential
-            // 
-            this.Potential.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Potential.HeaderText = "譜面定数";
-            this.Potential.MinimumWidth = 10;
-            this.Potential.Name = "Potential";
-            this.Potential.ReadOnly = true;
-            this.Potential.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Potential.Width = 79;
-            // 
-            // Best
-            // 
-            this.Best.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Best.HeaderText = "自己ベスト";
-            this.Best.MinimumWidth = 10;
-            this.Best.Name = "Best";
-            this.Best.ReadOnly = true;
-            this.Best.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Best.Width = 76;
-            // 
-            // BestPotential
-            // 
-            this.BestPotential.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.BestPotential.HeaderText = "ポテンシャル";
-            this.BestPotential.MinimumWidth = 10;
-            this.BestPotential.Name = "BestPotential";
-            this.BestPotential.ReadOnly = true;
-            this.BestPotential.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BestPotential.Width = 83;
-            // 
-            // BestStep
-            // 
-            this.BestStep.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.BestStep.HeaderText = "ステップ数";
-            this.BestStep.MinimumWidth = 10;
-            this.BestStep.Name = "BestStep";
-            this.BestStep.ReadOnly = true;
-            this.BestStep.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BestStep.Width = 76;
-            // 
-            // StepGL
-            // 
-            this.StepGL.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.StepGL.HeaderText = "ステップ数(GL対立)";
-            this.StepGL.MinimumWidth = 10;
-            this.StepGL.Name = "StepGL";
-            this.StepGL.ReadOnly = true;
-            this.StepGL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StepGL.Width = 130;
-            // 
-            // StepAxium
-            // 
-            this.StepAxium.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.StepAxium.HeaderText = "ステップ数(Axium対立)";
-            this.StepAxium.MinimumWidth = 10;
-            this.StepAxium.Name = "StepAxium";
-            this.StepAxium.ReadOnly = true;
-            this.StepAxium.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StepAxium.Width = 158;
-            // 
-            // StepFracture
-            // 
-            this.StepFracture.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.StepFracture.HeaderText = "ステップ数(FR光)";
-            this.StepFracture.MinimumWidth = 10;
-            this.StepFracture.Name = "StepFracture";
-            this.StepFracture.ReadOnly = true;
-            this.StepFracture.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StepFracture.Width = 129;
             // 
             // button1
             // 
@@ -368,6 +258,116 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.CheckClearLineClick);
             // 
+            // Rank
+            // 
+            this.Rank.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Rank.HeaderText = "順位";
+            this.Rank.MinimumWidth = 10;
+            this.Rank.Name = "Rank";
+            this.Rank.ReadOnly = true;
+            this.Rank.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Rank.Width = 64;
+            // 
+            // Song
+            // 
+            this.Song.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Song.HeaderText = "曲名";
+            this.Song.MinimumWidth = 10;
+            this.Song.Name = "Song";
+            this.Song.ReadOnly = true;
+            this.Song.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Song.Width = 64;
+            // 
+            // Difficulty
+            // 
+            this.Difficulty.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Difficulty.HeaderText = "難易度";
+            this.Difficulty.MinimumWidth = 10;
+            this.Difficulty.Name = "Difficulty";
+            this.Difficulty.ReadOnly = true;
+            this.Difficulty.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Difficulty.Width = 88;
+            // 
+            // Level
+            // 
+            this.Level.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Level.HeaderText = "レベル";
+            this.Level.MinimumWidth = 10;
+            this.Level.Name = "Level";
+            this.Level.ReadOnly = true;
+            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Level.Width = 74;
+            // 
+            // Potential
+            // 
+            this.Potential.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Potential.HeaderText = "譜面定数";
+            this.Potential.MinimumWidth = 10;
+            this.Potential.Name = "Potential";
+            this.Potential.ReadOnly = true;
+            this.Potential.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Potential.Width = 112;
+            // 
+            // Best
+            // 
+            this.Best.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Best.HeaderText = "自己ベスト";
+            this.Best.MinimumWidth = 10;
+            this.Best.Name = "Best";
+            this.Best.ReadOnly = true;
+            this.Best.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Best.Width = 119;
+            // 
+            // BestPotential
+            // 
+            this.BestPotential.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.BestPotential.HeaderText = "ポテンシャル";
+            this.BestPotential.MinimumWidth = 10;
+            this.BestPotential.Name = "BestPotential";
+            this.BestPotential.ReadOnly = true;
+            this.BestPotential.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BestPotential.Width = 128;
+            // 
+            // BestStep
+            // 
+            this.BestStep.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.BestStep.HeaderText = "ステップ数";
+            this.BestStep.MinimumWidth = 10;
+            this.BestStep.Name = "BestStep";
+            this.BestStep.ReadOnly = true;
+            this.BestStep.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BestStep.Width = 108;
+            // 
+            // StepGL
+            // 
+            this.StepGL.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.StepGL.HeaderText = "ステップ数(GL対立)";
+            this.StepGL.MinimumWidth = 10;
+            this.StepGL.Name = "StepGL";
+            this.StepGL.ReadOnly = true;
+            this.StepGL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StepGL.Width = 130;
+            // 
+            // StepPengin
+            // 
+            this.StepPengin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.StepPengin.HeaderText = "ステップ数(ペンギン対立)";
+            this.StepPengin.MinimumWidth = 10;
+            this.StepPengin.Name = "StepPengin";
+            this.StepPengin.ReadOnly = true;
+            this.StepPengin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StepPengin.Width = 138;
+            // 
+            // StepFracture
+            // 
+            this.StepFracture.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.StepFracture.HeaderText = "ステップ数(FR光)";
+            this.StepFracture.MinimumWidth = 10;
+            this.StepFracture.Name = "StepFracture";
+            this.StepFracture.ReadOnly = true;
+            this.StepFracture.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StepFracture.Width = 129;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
@@ -403,17 +403,6 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Song;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Difficulty;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Level;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Potential;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Best;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BestPotential;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BestStep;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StepGL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StepAxium;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StepFracture;
         private System.Windows.Forms.ComboBox addDataSong;
         private System.Windows.Forms.TextBox addDataScore;
         private System.Windows.Forms.ComboBox addDataDifficulty;
@@ -428,6 +417,17 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Song;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Difficulty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Level;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Potential;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Best;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BestPotential;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BestStep;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepGL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepPengin;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepFracture;
     }
 }
 
